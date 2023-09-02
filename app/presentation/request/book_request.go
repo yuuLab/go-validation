@@ -3,9 +3,10 @@ package request
 import validation "github.com/go-ozzo/ozzo-validation"
 
 type Book struct {
-	Title  string   `json:"title"`
-	Author string   `json:"author"`
-	Price  *float64 `json:"price"`
+	Title  string  `json:"title"`
+	Author string  `json:"author"`
+	Price  float64 `json:"price"`
+	Genre  string  `json:"genre"`
 }
 
 func (b Book) Validate() error {
@@ -26,6 +27,10 @@ func (b Book) Validate() error {
 			validation.Required.Error("価格は必須項目です。"),
 			validation.Max(1000000.0).Error("価格は 1,000,000円 以下で指定してください。"),
 			validation.Min(1.0).Error("価格は 1円 以上で指定してください。"),
+		),
+		validation.Field(
+			&b.Genre,
+			validation.In("NOVELS", "COMIC", "FICTION", "NON_FICTION").Error("値が正しくありません。"),
 		),
 	)
 }
