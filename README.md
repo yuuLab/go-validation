@@ -37,7 +37,7 @@ Example application of Gin and ozzo-validation.
    ```json
    {
      "type": "VALIDATION_ERROR",
-     "title": "validation errors",
+     "title": "Your request parameters didn't validate.",
      "invalid-params": [
        {
          "name": "title",
