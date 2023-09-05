@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/yuuLab/go-validation/presentation/handler"
 	"github.com/yuuLab/go-validation/presentation/validation"
 	"golang.org/x/exp/slog"
@@ -11,11 +12,11 @@ import (
 
 func main() {
 	r := gin.Default()
+	// set validator
+	binding.Validator = validation.NewOzzoValidator()
 	// set logger
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	slog.SetDefault(logger)
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
 
-	v := validation.NewValidator()
-	r.POST("/books", handler.NewBookHandler(v).Create)
+	r.POST("/books", handler.NewBookHandler().Create)
 	r.Run()
 }

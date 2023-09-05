@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,30 +10,24 @@ import (
 )
 
 type bookHandler struct {
-	validator *validation.Validator
 }
 
 // NewBookHandler creates a new BookHandler.
-func NewBookHandler(validator *validation.Validator) *bookHandler {
-	return &bookHandler{validator: validator}
+func NewBookHandler() *bookHandler {
+	return &bookHandler{}
 }
 
 // Create creates a new book from request information.
 func (h *bookHandler) Create(c *gin.Context) {
 	var req request.Book
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.Status(http.StatusBadRequest)
-		return
-	}
-
-	if err := h.validator.Validate(req); err != nil {
 		if verr, ok := err.(validation.ValidationError); ok {
+			slog.Info(verr.Error())
 			c.JSON(verr.Status(), verr.Response())
 			return
 		}
-		// unexpected error occurred...
-		slog.Warn(fmt.Sprintf("an unexpected error occurred during validation: %v", err))
-		c.Status(http.StatusInternalServerError)
+		// json decord errors, etc.
+		c.Status(http.StatusBadRequest)
 		return
 	}
 
