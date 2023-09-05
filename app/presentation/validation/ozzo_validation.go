@@ -64,7 +64,7 @@ func (v Validator) newServerError(err error) error {
 // newValidationError creates an error that wraps a Validation Error.
 func (v Validator) newValidationError(params []response.InvalidParams, err error) error {
 	return ValidationError{
-		response: response.ValidationError{Type: "VALIDATION_ERROR", Title: "validation errors", Pramas: params},
+		response: response.ValidationError{Type: "VALIDATION_ERROR", Title: "Your request parameters didn't validate.", Pramas: params},
 		status:   http.StatusBadRequest,
 		err:      err,
 	}
