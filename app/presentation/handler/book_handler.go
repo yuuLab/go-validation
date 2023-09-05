@@ -21,8 +21,8 @@ func NewBookHandler() *bookHandler {
 func (h *bookHandler) Create(c *gin.Context) {
 	var req request.Book
 	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Info(err.Error())
 		if verr, ok := err.(validation.ValidationError); ok {
-			slog.Info(verr.Error())
 			c.JSON(verr.Status(), verr.Response())
 			return
 		}
